@@ -6,7 +6,7 @@ import { A } from 'hookrouter';
 
 function ItensListaTarefas(props) {
     function marcarConcluida(tarefa) {
-        return tarefa.concluida ? 'line-though' : 'none'
+        return tarefa.concluida ? 'line-through' : 'none'
     }
 
     return (
@@ -19,7 +19,7 @@ function ItensListaTarefas(props) {
                     {tarefa.nome}
                 </td>
                 <td className="text-right">
-                    <A href={"/atalizar" + tarefa.id}
+                    <A href={"/atualizar/" + tarefa.id}
                         className={tarefa.concluida ? 'hidden' : 'btn btn-warning btn-sm'}
                     >
                         <FontAwesomeIcon icon={faEdit} />
@@ -30,7 +30,7 @@ function ItensListaTarefas(props) {
         )
     );
 }
-ItensListaTarefas.roTypes = {
+ItensListaTarefas.proTypes = {
     tarefas: ProTypes.array.isRequired,
     recarregarTarefas: ProTypes.func.isRequired
 };
