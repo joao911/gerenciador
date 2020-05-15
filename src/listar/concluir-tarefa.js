@@ -12,11 +12,23 @@ function ConcluirTarefa(props) {
         setExibirModal(true);
 
     }
-    function handleFecharModal(){
-
+    function handleFecharModal() {
+        setExibirModal(false)
     }
-    function handleConcluirTarefa(){
-        
+
+    function handleConcluirTarefa(event) {
+        event.preventDefault();
+        const tarefasDb = localStorage['tarefas'];
+        let tarefas = tarefasDb ? JSON.parse(tarefasDb) : [];
+        tarefas = tarefas.map(tarefa => {
+            if (tarefa.id === props.tarefa.id) {
+                tarefa.concluida = true;
+            }
+            return tarefa;
+        });
+        localStorage['tarefas'] = JSON.stringify(tarefas);
+        setExibirModal(false);
+        props.recarregarTarefas(true);
     }
 
     return (
@@ -26,39 +38,42 @@ function ConcluirTarefa(props) {
                 data-testid="btn-abrir-modal">
                 <FontAwesomeIcon icon={faClipboardCheck} />
             </Button>
-        </span>
-        <Modal show={exibirModal} onHide={handleFecharModal}>
-            <Modal.Header closeButton>
-                <Modal.Title>Conclui Tarefa</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                Deseja realmente concluir a seguinte tarefa
+            <Modal show={exibirModal} onHide={handleFecharModal}
+            data-testid='modal'
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>Conclui Tarefa</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Deseja realmente concluir a seguinte tarefa
                 <br />
-                <strong>
-                    {props.tarefa.nome}
-                </strong>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button variant="primary"
-                    onClick={handleConcluirTarefa}
-                    data-testid="btn-concluir"
-                >
-                    Sim
+                    <strong>
+                        {props.tarefa.nome}
+                    </strong>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary"
+                        onClick={handleConcluirTarefa}
+                        data-testid="btn-concluir"
+                    >
+                        Sim
                 </Button>
-                <Button variant="light"
-                    onclick={hadleFecharModal}
-                    data-testid="btn-fechar-modal"
-                >
-                    não
+                    <Button variant="light"
+                        onClick={handleFecharModal}
+                        data-testid="btn-fechar-modal"
+                    >
+                        não
                 </Button>
-            </Modal.Footer>
-        </Modal>
+                </Modal.Footer>
+            </Modal>
+
+        </span>
     )
 }
 
 ConcluirTarefa.propTypes = {
     tarefa: PropTypes.object.isRequired,
-    recarrgarTarefas: PropTypes.func.isRequired,
-    className: PropTypes.string.isRequired
+    recarregarTarefas: PropTypes.func.isRequired,
+    className: PropTypes.string
 }
 export default ConcluirTarefa
